@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if category %} 
+        {{category.desc|truncatewords:155}}
+  {% else %}
+      Welcome to Happy Shoppy where you can explore many brands..
+  {% endif %}
+{% endblock %}
+{% block title %}
+      {% if category %} 
+        {{category.name}} - Happy shoppy
+      {% else %}
+      Explore the all new collections - Happy Shoppy
+      {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+  <div class="row my_row_class">
+      <div class="mx_auto">
+    <p><a href="{% url 'shopapp:allProdCat' %}">Our all new collections </a><b>|{{category.name}}</b></p><br>
+      <img src="{% static 'img/2.png' %}" alt="" width="1330px" height="650px">
+
+  </div>
+      </div>
+</div>
+  {% endif %}
+<div class="mx_auto">
+  {% if category %}
+    <center>
+  <img  src="{{category.image.url}}" alt="{{category.name}}" border="3px" width="150px">
+        </center>
+</div>
+   <br>
+<div>
+  <h2 class="text-center my_title" >{{category.name}}</h2>
+  <p class="text-justify">{{category.desc}}</p>
+</div>
+{% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/4.png' %}" alt="Our products" width="1335px">
+  </div>
+
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/5.png' %}" alt="" width="1335px">
+</div>
+<br>
+<div>
+  <h1 class="text-center my_title">About us!</h1>
+  <p class="text-justify">Happy Shoppy is a form of electronic commerce which allows consumers to
+      directly buy goods or services from a seller over the Internet using a web browser
+      or a mobile app.</p>
+</div>
+{% endif %}
+<div class="container">
+  <div class="row mx_auto">
+    {% for product in products.object_list %}
+    <div class="my_bottom_margin col-9 col-sm-12 col-md-4  col-lg-4">
+        <div class="card" style="min-width:15rem;">
+      <a href="{{product.get_url}}"><img class="card-img-top" src="{{product.image.url}}" alt="{{product.name}}"></a>
+   <div class="card-body">
+     <h3>{{product.name}}</h3>
+
+       <p><b>Rs:{{product.price}}</b></p>
+   </div>
+    </div>
+    </div>
+    {% endfor %}
+  </div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
